@@ -19,12 +19,10 @@ export default class Navigation extends Component {
 		const Stack = createStackNavigator();
 		console.log("=========== Navigation ===========");
 		return (
-			<NavigationContainer>
 			  <Stack.Navigator>
 			    <Stack.Screen name="Calendar" component={Calendar} />
 			    <Stack.Screen name="Agenda" component={AgendaNavigation} />
 			  </Stack.Navigator>
-			</NavigationContainer>
 		);
 	};
 }

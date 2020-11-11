@@ -25,6 +25,7 @@ export default class Agenda extends Component {
 			waktu_agenda:this.props.action == 'Add' ? '' : data.waktu_agenda,
 			action : '',
 			error: '',
+			peserta:this.props.action == 'Add' ? '' : this.props.route.name,
 		}
 		//this.handler = this.handler.bind(this);
 		this.loadJWT = deviceStorage.loadJWT.bind(this);
@@ -33,7 +34,38 @@ export default class Agenda extends Component {
 
 	};
 	
-	
+	absen =()=>{
+		const { id_agenda, user, role } = this.state;
+		
+		var formdata=new FormData();
+		formdata.append("id_agenda",id_agenda);
+		if(role == 'DIREKSI'){		
+			formdata.append("id_direksi",user);
+		}else{
+			formdata.append("id_protokol",user);
+		}
+		var config = {
+			method: 'post',
+			url: 'http://barista.kurniateknologi.co.id/API/absensi',
+			headers: { 
+				'X-API-KEY': 'BARISTA-KEY', 
+				'Content-Type': 'application/x-www-form-urlencoded', 
+				'Authorization': this.state.jwt
+			},
+			data : formdata
+		};
+		 
+		 // NOTE Post to HTTPS only in production
+		axios(config)
+			.then((response) => {
+				console.log("=========== ABSENSI SUCCESS ===========");
+				this.props.navigation.goBack()
+			})
+			.catch((error) => {
+				console.log("=========== ABSENSI ERROR ===========");
+				console.log(error)
+			});
+	}
 	handler =(action)=>{
 		console.log(this.props.screenProps);
 		const { kode_agenda, judul_agenda,tanggal_agenda, waktu_agenda, lokasi, id_agenda } = this.state;
@@ -84,10 +116,12 @@ export default class Agenda extends Component {
 			axios(config)
 			.then((response) => {
 				console.log("=========== SAVE SUCCESS ===========");
-				console.log(response.data);
-				if(this.props.route.params.id != ''){
-					
+				//console.log(response.data);
+				if(this.state.id_agenda != ''){
+					console.log('1');
+					this.props.navigation.goBack()
 				}else{
+					console.log('2');
 					this.props.backToCalendar();
 				}
 			})
@@ -114,7 +148,7 @@ export default class Agenda extends Component {
 		//})
 	  //}
 	  console.log("=========== Agenda ===========");
-	  console.log(this.props.screenProps)
+	  console.log(this.state)
 	  return (	
 		<View style={container}>
 		  <Container >
@@ -155,14 +189,20 @@ export default class Agenda extends Component {
 				</Button>
 			  </View>
 			  :
-			  <View style={buttonRow2}>
-				<Button iconLefteft bordered style={buttonStly} onPress={()=>this.handler('update')} transparent >
-					<Icon name='create-outline' style={{fontSize:40, color:'#0491ac'}}/>
-				</Button>
-				<Button iconLefteft bordered style={buttonStly} onPress={()=>this.handler('delete')} transparent >
-					<Icon name='trash' style={{fontSize:40, color:'#0491ac'}}/>
-				  </Button>
-			  </View>
+				this.state.peserta == 'ADMINROOT' ? 
+				  <View style={buttonRow2}>
+					<Button iconLefteft bordered style={buttonStly} onPress={()=>this.handler('update')} transparent >
+						<Icon name='create-outline' style={{fontSize:40, color:'#0491ac'}}/>
+					</Button>
+					<Button iconLefteft bordered style={buttonStly} onPress={()=>this.handler('delete')} transparent >
+						<Icon name='trash' style={{fontSize:40, color:'#0491ac'}}/>
+					  </Button>
+				  </View> :
+				  <View style={buttonRow2}>
+					<Button iconLefteft bordered style={buttonStly} onPress={()=>this.absen()} transparent >
+						<Icon name='checkmark-outline' style={{fontSize:40, color:'#0491ac'}}/>
+					</Button>
+				  </View>
 			  }
 			  
 			</Content>

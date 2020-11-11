@@ -1,8 +1,12 @@
 import React from 'react';
 import { Text, View, ActivityIndicator  } from 'react-native';
 import Navigation from './screens/Navigation';
+import DrawerNavigation from './screens/DrawerNavigation';
+import RootNavigation from './screens/RootNavigation';
+
 import Login from './screens/Login';
 import deviceStorage from './screens/Services/deviceStorage'; 
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 export default class App extends React.Component {
 	
@@ -26,7 +30,7 @@ export default class App extends React.Component {
 	}
 
 	render(){
-		if(this.state.loading){
+		/*if(this.state.loading){
 		  return (
 			<View>
 			  <ActivityIndicator size="large" color="#0000ff"/>
@@ -38,9 +42,13 @@ export default class App extends React.Component {
 		  );
 		} else if (this.state.jwt) {
 		  return (
-			<Navigation jwt={this.state.jwt} deleteJWT={this.deleteJWT} />
+			<DrawerNavigation jwt={this.state.jwt} deleteJWT={this.deleteJWT} />
 		  );
-		}
+		}*/
+
+		return(
+			<RootNavigation />
+		);
 	}
 	
 }

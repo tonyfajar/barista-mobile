@@ -10,8 +10,8 @@ export default class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
-      username: 'admin',
-      password: 'admin12321',
+      username: 'DIRDAN1',
+      password: '123456',
       error: '',
       loading: false
     };
@@ -21,6 +21,7 @@ export default class Login extends Component {
   }
 
   loginUser() {
+	console.log(this.props.navigation);
     const { username, password } = this.state;
     this.setState({ error: '', loading: true });
 	
@@ -42,10 +43,11 @@ export default class Login extends Component {
  // NOTE Post to HTTPS only in production
     axios(config)
     .then((response) => {
-		console.log("=========== LOGIN ===========");
-		console.log(response.data);
+	  console.log("=========== LOGIN ===========");
       deviceStorage.saveKey("id_token", response.data.token);
-      this.props.newJWT(response.data.token);
+	  deviceStorage.saveKey("role", response.data.data.role);
+	  deviceStorage.saveKey("id_user", response.data.data.id);
+	  console.log(this.props.navigation.navigate('Calendar'));
     })
     .catch((error) => {
 		console.log("=========== LOGIN ERROR ===========");
@@ -64,7 +66,8 @@ export default class Login extends Component {
   render() {
     const { username, password, error, loading } = this.state;
 	const { container, button, errorTextStyle } = styles;
-    return (
+	console.log("=========== LOGIN ===========");
+	return (
 		<Container >
 			<Header />
 			<Content contentContainerStyle={{flex: 1}} >

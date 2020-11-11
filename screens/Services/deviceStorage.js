@@ -1,4 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import Login from '../../screens/Login';
+import React from 'react';
+
 
 const deviceStorage = {
   async saveKey(key, valueToSave) {
@@ -12,10 +15,14 @@ const deviceStorage = {
   async loadJWT() {
     try {
       console.log('LOAD TOKEN')
-      const value = await AsyncStorage.getItem('id_token');
-      if (value !== null) {
+      const jwt = await AsyncStorage.getItem('id_token');
+	  const user = await AsyncStorage.getItem('id_user');
+	  const role = await AsyncStorage.getItem('role');
+      if (jwt !== null) {
         this.setState({
-         jwt: value,
+         jwt: jwt,
+		 user: user,
+		 role:role,
          loading: false
         });
       } else {
@@ -29,8 +36,9 @@ const deviceStorage = {
 	//console.log(this.state.jwt)
   },
 
-  async deleteJWT() {
-	  console.log('DELETE')
+  async deleteJWT(navigation) {
+	console.log('DELETE')
+	navigation.navigation.closeDrawer();
     try{
       await AsyncStorage.removeItem('id_token')
       .then(

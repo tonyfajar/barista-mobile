@@ -28,7 +28,8 @@ export default class Calendar extends Component {
   }
   
 	componentDidMount=()=>{
-		
+		console.log("=========== ROOT NAVIGATION ===========");
+		console.log(this.state);
 		this.props.navigation.addListener(
 			'focus',
 			() =>{
@@ -101,6 +102,7 @@ export default class Calendar extends Component {
     })
     .catch((error) => {
 		console.log("=========== ON VISIBLE MONTH [ERROR]===========");
+		console.log(error);
 		if(error.response.status == 401 && error.response.data.message == 'Expired token'){
 			this.deleteJWT();
 		}
@@ -108,6 +110,8 @@ export default class Calendar extends Component {
   }
 
   render() {
+	console.log("===== CALENDAR =====");
+	console.log(this.state);
 	if(this.state.agenda){
 		console.log(this.state.agenda);
 	}else{
@@ -151,6 +155,7 @@ export default class Calendar extends Component {
 						
 					  }
 				</View>
+				{this.state.role == 'ADMINROOT' ? 
 				<Fab
 					active={this.state.active}
 					direction="up"
@@ -159,7 +164,8 @@ export default class Calendar extends Component {
 					position="bottomRight"
 					onPress={() => this.formTrigger('Agenda')}>
 					<Icon name="plus" />
-				  </Fab>
+				  </Fab> : null
+				}
 			</View>
 		</View>
     );
@@ -172,7 +178,6 @@ export default class Calendar extends Component {
 	    console.log(data)
 	    this.props.navigation.navigate(Nav,{ data })
 		//this.props.navigation.navigate(action,{ action })
-		
 	}
 	
 	loadDayAgenda(day){

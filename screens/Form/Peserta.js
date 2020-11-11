@@ -29,11 +29,11 @@ export default class Peserta extends Component {
 	
 	getPeserta=()=>{
 		console.log("=========== GET PESERTA ===========");
-		console.log(this.state)
+		console.log('http://barista.kurniateknologi.co.id/barista/API/'+this.state.peserta.toLowerCase()+'?id_agenda='+this.state.id_agenda);
 		var config = {
 		  method: 'get',
-		  url: 'http://barista.kurniateknologi.co.id/API/id_agenda?'+this.state.id_agenda,
-		  //url: 'http://192.168.43.110:8080/barista/API/'+this.state.peserta.toLowerCase()+'?id_agenda='+this.state.id_agenda,
+		  //url: 'http://barista.kurniateknologi.co.id/API/id_agenda?'+this.state.id_agenda,
+		  url: 'http://barista.kurniateknologi.co.id/API/'+this.state.peserta.toLowerCase()+'?id_agenda='+this.state.id_agenda,
 		  headers: { 
 			'X-API-KEY': 'BARISTA-KEY', 
 			'Authorization': this.state.jwt
@@ -46,6 +46,7 @@ export default class Peserta extends Component {
 			const container = [];
 			if(this.state.peserta == 'Direksi'){
 				response.data.data.map(data =>{
+					console.log(data);
 					var dataObjt = {
 						key: data.nama_direksi,
 						phone: data.kontak,
